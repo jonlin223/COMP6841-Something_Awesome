@@ -11,3 +11,6 @@ This project consists of three sections:
 ## Key Links
 - [Something Awesome Summary](https://www.openlearning.com/u/jonolin/blog/SomethingAwesomeSummary/)
 - [Educative Blog Post Compilation](https://future-dog-e98.notion.site/COMP6841-Something-Awesome-Let-s-learn-about-keyloggers-b4d63a64d0f24a4aa8503d7a1eda459b)
+
+## Note
+This does not hide the user's email and password and is therefore very much not secure. You can use it by changing the `EMAIL` and `PASSWORD` global fields.
